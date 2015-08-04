@@ -1,0 +1,56 @@
+# Visual Studio artifacts
+bin
+obj
+*.user
+*.suo
+*.vsp
+*.csproj.VisualState.xml
+*.vbproj.VisualState.xml
+*.cache
+TestResults
+
+# CodeReview
+codereview.rc
+
+# GhostDoc artifacts
+CSharpDriver.sln.GhostDoc.xml
+
+# Mac OS artifacts
+.DS_Store
+
+# MonoDevelop artifacts
+*.pidb
+*.userprefs
+test-results
+
+# NUnit artifacts
+TestResult.xml
+
+# Resharper artifacts
+_ReSharper.*
+
+# Sandcastle artifacts
+Help
+*.shfbproj_*
+
+# Vim artifacts
+*.swp
+*~
+
+# Nuget artifacts
+src/packages
+
+# Nupkg artifacts
+*.nupkg
+
+# NCrunch artifacts
+*.ncrunch*
+
+# Merge tool artifacts
+*.cs.orig
+*.vb.orig
+
+# Other
+artifacts
+packages
+Tools/FAKE

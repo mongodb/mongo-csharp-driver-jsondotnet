@@ -1,2 +1,7 @@
-# mongo-csharp-driver-jsondotnet
-The C#/.NET driver will have a new component to integrate with JSON.NET that needs to live separately from the .NET driver itself.
+MongoDB .NET Driver Json.NET Integration
+========================================
+
+This repository contains the project that supports using Json.NET to serialize/deserialize
+documents stored in MongoDB using Json.NET serialization.
+
+It is a standalone project that has an external dependency on the MongoDB .NET Driver.
