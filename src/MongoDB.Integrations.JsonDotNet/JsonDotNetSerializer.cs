@@ -17,6 +17,11 @@ using System;
 using MongoDB.Integrations.JsonDotNet.Converters;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson;
+using System.Reflection;
+using Newtonsoft.Json.Serialization;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace MongoDB.Integrations.JsonDotNet
 {
@@ -32,7 +37,7 @@ namespace MongoDB.Integrations.JsonDotNet
         }
     }
 
-    public class JsonDotNetSerializer<TValue> : SerializerBase<TValue>
+    public class JsonDotNetSerializer<TValue> : SerializerBase<TValue>, IBsonArraySerializer, IBsonDocumentSerializer
     {
         // private fields
         private readonly Newtonsoft.Json.JsonSerializer _wrappedSerializer;
@@ -64,6 +69,98 @@ namespace MongoDB.Integrations.JsonDotNet
         {
             var writerAdapter = new JsonWriterAdapter(context.Writer);
             _wrappedSerializer.Serialize(writerAdapter, value, args.NominalType);
+        }
+
+        public bool TryGetItemSerializationInfo(out BsonSerializationInfo serializationInfo)
+        {
+            var valueType = typeof(TValue);
+
+            var contract = _wrappedSerializer.ContractResolver.ResolveContract(valueType);
+            var arrayContract = contract as JsonArrayContract;
+            if (arrayContract == null)
+            {
+                throw new BsonSerializationException($"The Json.NET contract for type \"{valueType.Name}\" is not a JsonArrayContract.");
+            }
+            if (arrayContract.Converter != null)
+            {
+                throw new BsonSerializationException($"The Json.NET contract for type \"{valueType.Name}\" has a Converter and JsonConverters are opaque.");
+            }
+            if (arrayContract.IsReference ?? false)
+            {
+                throw new BsonSerializationException($"The Json.NET contract for type \"{valueType.Name}\" is serialized as a reference.");
+            }
+            if (arrayContract.ItemConverter != null)
+            {
+                throw new BsonSerializationException($"The Json.NET contract for type \"{valueType.Name}\" has an ItemConverter and JsonConverters are opaque.");
+            }
+
+            var itemType = arrayContract.CollectionItemType;
+            var itemSerializerType = typeof(JsonDotNetSerializer<>).MakeGenericType(itemType);
+            var itemSerializer = (IBsonSerializer)Activator.CreateInstance(itemSerializerType, _wrappedSerializer);
+
+            serializationInfo = new BsonSerializationInfo(null, itemSerializer, nominalType: itemType);
+            return true;
+        }
+
+        public bool TryGetMemberSerializationInfo(string memberName, out BsonSerializationInfo serializationInfo)
+        {
+            serializationInfo = null;
+
+            var valueType = typeof(TValue);
+            var contract = _wrappedSerializer.ContractResolver.ResolveContract(valueType);
+            var objectContract = contract as JsonObjectContract;
+            if (objectContract == null)
+            {
+                throw new BsonSerializationException($"The Json.NET contract for type \"{valueType.Name}\" is not a JsonObjectContract.");
+            }
+            if (objectContract.Converter != null)
+            {
+                throw new BsonSerializationException($"The Json.NET contract for type \"{valueType.Name}\" has a JsonConverter and JsonConverters are opaque.");
+            }
+            if (objectContract.IsReference ?? false)
+            {
+                throw new BsonSerializationException($"The Json.NET contract for type \"{valueType.Name}\" is serialized as a reference.");
+            }
+
+            var property = objectContract.Properties.FirstOrDefault(p => p.UnderlyingName == memberName);
+            if (property == null)
+            {
+                return false;
+            }
+            var elementName = property.PropertyName;
+
+            Type memberType;
+            if (!TryGetMemberType(valueType, memberName, out memberType))
+            {
+                return false;
+            }
+
+            var memberSerializerType = typeof(JsonDotNetSerializer<>).MakeGenericType(memberType);
+            var memberSerializer = (IBsonSerializer)Activator.CreateInstance(memberSerializerType, _wrappedSerializer);
+
+            serializationInfo = new BsonSerializationInfo(elementName, memberSerializer, nominalType: memberType);
+            return true;
+        }
+
+        private bool TryGetMemberType(Type type, string memberName, out Type memberType)
+        {
+            memberType = null;
+
+            var memberInfos = type.GetMember(memberName);
+            if (memberInfos.Length != 1)
+            {
+                return false;
+            }
+            var memberInfo = memberInfos[0];
+
+            switch (memberInfo.MemberType)
+            {
+                case MemberTypes.Field: memberType = ((FieldInfo)memberInfo).FieldType; break;
+                case MemberTypes.Property: memberType = ((PropertyInfo)memberInfo).PropertyType; break;
+                default: throw new BsonSerializationException($"Unsupported member type \"{memberInfo.MemberType}\" for member: {memberName}.");
+            }
+
+            return true;
         }
     }
 }
