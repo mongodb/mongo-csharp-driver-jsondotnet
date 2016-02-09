@@ -1,0 +1,15 @@
+baseurl = "/mongo-csharp-driver-jsondotnet/1.0.0"
+languageCode = "en-us"
+title = "MongoDB .NET Driver Json.NET Integration"
+theme = "mongodb"
+canonifyurls = false
+
+[blackfriday]
+  plainIdAnchors = true
+
+[[menu.main]]
+    name = "Source Code"
+    pre = "<i class='fa fa-github'></i>"
+    weight = 900
+    identifier = "githubLink"
+    url = "https://github.com/mongodb/mongo-csharp-driver-jsondotnet/tree/master"

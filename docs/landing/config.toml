@@ -1,0 +1,16 @@
+baseurl = "/mongo-csharp-driver-jsondotnet/"
+languageCode = "en-us"
+title = "MongoDB .NET Driver Json.NET Integration"
+canonifyurls = false
+githubRepo = "mongo-csharp-driver-jsondotnet"
+
+[params.authors]
+  [params.authors.Derek]
+    "firstName"  = "Derek"
+    "lastName"   = "Perkins"
+  [params.authors.Joe]
+    "firstName"  = "Joe"
+    "lastName"   = "Bergevin"
+  [params.authors.Tanner]
+    "firstName"  = "Tanner"
+    "lastName"   = "Linsley"

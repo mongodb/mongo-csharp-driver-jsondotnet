@@ -1,0 +1,4 @@
+githubRepo = "mongo-csharp-driver-jsondotnet"
+githubBranch = "master"
+currentVersion = "1.0.0"
+highlightTheme = "idea.css"

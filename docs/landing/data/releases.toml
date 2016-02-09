@@ -1,0 +1,6 @@
+current = "1.0.0"
+[[versions]]
+  version = "1.0.0"
+  status = "current"
+  docs = "http://mongodb.github.io/mongo-csharp-driver-jsondotnet/1.0.0/"
+  
