@@ -1,4 +1,4 @@
-﻿/* Copyright 2015 MongoDB Inc.
+﻿/* Copyright 2015-2016 MongoDB Inc.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using NUnit.Framework;
 
-namespace MongoDB.Integrations.JsonDotNet.Tests.JsonDotNetSerializer
+namespace MongoDB.Integrations.JsonDotNet.Tests.JsonSerializerAdapter
 {
     [TestFixture]
-    public class JsonDotNetSerializerJValueTests : JsonDotNetSerializerTestsBase
+    public class JsonSerializerAdapterJValueTests : JsonSerializerAdapterTestsBase
     {
         [TestCase("BsonBoolean", "{ x : true }")]
         [TestCase("BsonBinaryData", "{ x : { $binary : \"AQ==\", $type : \"00\" } }")]
@@ -176,7 +176,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.JsonDotNetSerializer
         private IBsonSerializer<Newtonsoft.Json.Linq.JToken> CreateSubject()
         {
             //var subject = new JValueSerializer();
-            var subject = new JsonDotNetSerializer<Newtonsoft.Json.Linq.JToken>();
+            var subject = new JsonSerializerAdapter<Newtonsoft.Json.Linq.JToken>();
             return subject;
         }
     }

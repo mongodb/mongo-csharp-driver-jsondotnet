@@ -1,4 +1,4 @@
-﻿/* Copyright 2015 MongoDB Inc.
+﻿/* Copyright 2015-2016 MongoDB Inc.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ namespace MongoDB.Integrations.JsonDotNet
         // constructors
         public JsonDotNetSerializationProvider(Newtonsoft.Json.JsonSerializer wrappedSerializer = null, Func<Type, bool> predicate = null)
         {
-            _wrappedSerializer = wrappedSerializer ?? JsonDotNetSerializer.CreateWrappedSerializer();
+            _wrappedSerializer = wrappedSerializer ?? JsonSerializerAdapter.CreateWrappedSerializer();
             _predicate = predicate ?? (t => true);
         }
 
@@ -55,7 +55,7 @@ namespace MongoDB.Integrations.JsonDotNet
                 return null;
             }
 
-            var serializerType = typeof(JsonDotNetSerializer<>).MakeGenericType(type);
+            var serializerType = typeof(JsonSerializerAdapter<>).MakeGenericType(type);
             var constructorInfo = serializerType.GetConstructor(new Type[] { typeof(Newtonsoft.Json.JsonSerializer) });
             var serializer = (IBsonSerializer)constructorInfo.Invoke(new object[] { _wrappedSerializer });
             return serializer;

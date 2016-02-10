@@ -1,4 +1,4 @@
-﻿/* Copyright 2015 MongoDB Inc.
+﻿/* Copyright 2015-2016 MongoDB Inc.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ using System.Collections.Generic;
 
 namespace MongoDB.Integrations.JsonDotNet
 {
-    public static class JsonDotNetSerializer
+    public static class JsonSerializerAdapter
     {
         // private static methods
         public static Newtonsoft.Json.JsonSerializer CreateWrappedSerializer()
@@ -37,18 +37,18 @@ namespace MongoDB.Integrations.JsonDotNet
         }
     }
 
-    public class JsonDotNetSerializer<TValue> : SerializerBase<TValue>, IBsonArraySerializer, IBsonDocumentSerializer
+    public class JsonSerializerAdapter<TValue> : SerializerBase<TValue>, IBsonArraySerializer, IBsonDocumentSerializer
     {
         // private fields
         private readonly Newtonsoft.Json.JsonSerializer _wrappedSerializer;
 
         // constructors
-        public JsonDotNetSerializer()
-            : this(JsonDotNetSerializer.CreateWrappedSerializer())
+        public JsonSerializerAdapter()
+            : this(JsonSerializerAdapter.CreateWrappedSerializer())
         {
         }
 
-        public JsonDotNetSerializer(Newtonsoft.Json.JsonSerializer wrappedSerializer)
+        public JsonSerializerAdapter(Newtonsoft.Json.JsonSerializer wrappedSerializer)
         {
             if (wrappedSerializer == null)
             {
@@ -95,7 +95,7 @@ namespace MongoDB.Integrations.JsonDotNet
             }
 
             var itemType = arrayContract.CollectionItemType;
-            var itemSerializerType = typeof(JsonDotNetSerializer<>).MakeGenericType(itemType);
+            var itemSerializerType = typeof(JsonSerializerAdapter<>).MakeGenericType(itemType);
             var itemSerializer = (IBsonSerializer)Activator.CreateInstance(itemSerializerType, _wrappedSerializer);
 
             serializationInfo = new BsonSerializationInfo(null, itemSerializer, nominalType: itemType);
@@ -135,7 +135,7 @@ namespace MongoDB.Integrations.JsonDotNet
                 return false;
             }
 
-            var memberSerializerType = typeof(JsonDotNetSerializer<>).MakeGenericType(memberType);
+            var memberSerializerType = typeof(JsonSerializerAdapter<>).MakeGenericType(memberType);
             var memberSerializer = (IBsonSerializer)Activator.CreateInstance(memberSerializerType, _wrappedSerializer);
 
             serializationInfo = new BsonSerializationInfo(elementName, memberSerializer, nominalType: memberType);

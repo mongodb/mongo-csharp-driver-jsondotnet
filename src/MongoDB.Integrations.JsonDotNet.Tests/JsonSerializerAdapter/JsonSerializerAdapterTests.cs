@@ -1,4 +1,4 @@
-﻿/* Copyright 2015 MongoDB Inc.
+﻿/* Copyright 2015-2016 MongoDB Inc.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -19,15 +19,15 @@ using MongoDB.Bson;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace MongoDB.Integrations.JsonDotNet.Tests.JsonDotNetSerializer
+namespace MongoDB.Integrations.JsonDotNet.Tests.JsonSerializerAdapter
 {
     [TestFixture]
-    public class JsonDotNetSerializerTests
+    public class JsonSerializerAdapterTests
     {
         [Test]
         public void constructor_should_initialize_instance()
         {
-            var result = new JsonDotNetSerializer<object>();
+            var result = new JsonSerializerAdapter<object>();
 
             result.ValueType.Should().Be(typeof(object));
         }
@@ -36,7 +36,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.JsonDotNetSerializer
         public void constructor_with_wrappedSerializer_should_initialize_instance()
         {
             var wrappedSerializer = Substitute.For<Newtonsoft.Json.JsonSerializer>();
-            var result = new JsonDotNetSerializer<object>(wrappedSerializer);
+            var result = new JsonSerializerAdapter<object>(wrappedSerializer);
 
             result.ValueType.Should().Be(typeof(object));
         }
@@ -44,14 +44,14 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.JsonDotNetSerializer
         [Test]
         public void constructor_with_wrappedSerializer_should_throw_when_wrappedSerializer_is_null()
         {
-            Action action = () => { var result = new JsonDotNetSerializer<object>(null); };
+            Action action = () => { var result = new JsonSerializerAdapter<object>(null); };
 
             action.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("wrappedSerializer");
         }
     }
 
     [TestFixture]
-    public class JsonDotNetSerializerClassWithBsonInt32Tests : JsonDotNetSerializerTestsBase
+    public class JsonSerializerAdapterClassWithBsonInt32Tests : JsonSerializerAdapterTestsBase
     {
         private class C
         {
@@ -62,7 +62,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.JsonDotNetSerializer
         [TestCase("{ V : 1 }", 1)]
         public void Deserialize_should_return_expected_result(string json, int? nullableInt32)
         {
-            var subject = new JsonDotNetSerializer<C>();
+            var subject = new JsonSerializerAdapter<C>();
             var expectedResult = nullableInt32 == null ? null : (BsonInt32)nullableInt32.Value;
 
             var result = Deserialize<C>(subject, ToBson(json));
@@ -74,7 +74,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.JsonDotNetSerializer
         [TestCase(1, "{ \"V\" : 1 }")]
         public void Serialize_should_have_expected_result(int? nullableInt32, string expectedResult)
         {
-            var subject = new JsonDotNetSerializer<C>();
+            var subject = new JsonSerializerAdapter<C>();
             var value = new C { V = nullableInt32 == null ? null : (BsonInt32)nullableInt32.Value };
 
             var result = Serialize(subject, value);
@@ -84,7 +84,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.JsonDotNetSerializer
     }
 
     [TestFixture]
-    public class JsonDotNetSerializerClassWithBsonMaxKeyTests : JsonDotNetSerializerTestsBase
+    public class JsonSerializerAdapterClassWithBsonMaxKeyTests : JsonSerializerAdapterTestsBase
     {
         private class C
         {
@@ -95,7 +95,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.JsonDotNetSerializer
         [TestCase("{ V : { $maxKey : 1 } }", true)]
         public void Deserialize_should_return_expected_result(string json, bool? nullableMaxKey)
         {
-            var subject = new JsonDotNetSerializer<C>();
+            var subject = new JsonSerializerAdapter<C>();
             var expectedResult = nullableMaxKey == null ? null : BsonMaxKey.Value;
 
             var result = Deserialize<C>(subject, ToBson(json));
@@ -107,7 +107,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.JsonDotNetSerializer
         [TestCase(true, "{ \"V\" : MaxKey }")]
         public void Serialize_should_have_expected_result(bool? nullableMaxKey, string expectedResult)
         {
-            var subject = new JsonDotNetSerializer<C>();
+            var subject = new JsonSerializerAdapter<C>();
             var value = new C { V = nullableMaxKey == null ? null : BsonMaxKey.Value };
 
             var result = Serialize(subject, value);
@@ -117,7 +117,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.JsonDotNetSerializer
     }
 
     [TestFixture]
-    public class JsonDotNetSerializerClassWithIntTests : JsonDotNetSerializerTestsBase
+    public class JsonSerializerAdapterClassWithIntTests : JsonSerializerAdapterTestsBase
     {
         private class C
         {
@@ -128,7 +128,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.JsonDotNetSerializer
         [TestCase("{ X : 2 }", 2)]
         public void Deserialize_should_return_expected_result(string json, int expectedResult)
         {
-            var subject = new JsonDotNetSerializer<C>();
+            var subject = new JsonSerializerAdapter<C>();
 
             var result = Deserialize<C>(subject, ToBson(json));
 
@@ -139,7 +139,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.JsonDotNetSerializer
         [TestCase(2, "{ X : 2 }")]
         public void Serialize_should_have_expected_result(int x, string expectedResult)
         {
-            var subject = new JsonDotNetSerializer<C>();
+            var subject = new JsonSerializerAdapter<C>();
             var value = new C { X = x };
 
             var result = Serialize(subject, value);
@@ -149,7 +149,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.JsonDotNetSerializer
     }
 
     [TestFixture]
-    public class JsonDotNetSerializerClassWithObjectIdTests : JsonDotNetSerializerTestsBase
+    public class JsonSerializerAdapterClassWithObjectIdTests : JsonSerializerAdapterTestsBase
     {
         private class C
         {
@@ -161,7 +161,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.JsonDotNetSerializer
         [TestCase("{ _id : ObjectId(\"2233445566778899aabbccdd\") }", "2233445566778899aabbccdd")]
         public void Deserialize_should_return_expected_result(string json, string expectedResult)
         {
-            var subject = new JsonDotNetSerializer<C>();
+            var subject = new JsonSerializerAdapter<C>();
 
             var result = Deserialize<C>(subject, ToBson(json));
 
@@ -172,7 +172,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.JsonDotNetSerializer
         [TestCase("2233445566778899aabbccdd", "{ \"_id\" : ObjectId(\"2233445566778899aabbccdd\") }")]
         public void Serialize_should_have_expected_result(string hexValue, string expectedResult)
         {
-            var subject = new JsonDotNetSerializer<C>();
+            var subject = new JsonSerializerAdapter<C>();
             var value = new C { Id = ObjectId.Parse(hexValue) };
 
             var result = Serialize(subject, value);

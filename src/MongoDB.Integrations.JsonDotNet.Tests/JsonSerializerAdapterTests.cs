@@ -1,4 +1,4 @@
-﻿/* Copyright 2015 MongoDB Inc.
+﻿/* Copyright 2015-2016 MongoDB Inc.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -30,12 +30,12 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
 {
     // public methods
     [TestFixture]
-    public class JsonDotNetSerializerTests
+    public class JsonSerializerAdapterTests
     {
         [Test]
         public void TryGetItemSerializationInfo_should_return_expected_result()
         {
-            var subject = new JsonDotNetSerializer<int[]>();
+            var subject = new JsonSerializerAdapter<int[]>();
 
             BsonSerializationInfo info;
             var result = subject.TryGetItemSerializationInfo(out info);
@@ -43,7 +43,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
             result.Should().BeTrue();
             info.ElementName.Should().BeNull();
             info.NominalType.Should().Be(typeof(int));
-            info.Serializer.Should().BeOfType<JsonDotNetSerializer<int>>();
+            info.Serializer.Should().BeOfType<JsonSerializerAdapter<int>>();
             info.Serializer.ValueType.Should().Be(typeof(int));
         }
 
@@ -60,7 +60,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
                 {
                     { typeof(int), intContract }
                 });
-            var subject = new JsonDotNetSerializer<int[]>(wrappedSerializer);
+            var subject = new JsonSerializerAdapter<int[]>(wrappedSerializer);
 
             BsonSerializationInfo info;
             Action action = () => subject.TryGetItemSerializationInfo(out info);
@@ -71,7 +71,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         [Test]
         public void TryGetItemSerializationInfo_should_throw_when_contract_is_not_an_array_contract()
         {
-            var subject = new JsonDotNetSerializer<C>();
+            var subject = new JsonSerializerAdapter<C>();
 
             BsonSerializationInfo info;
             Action action = () => subject.TryGetItemSerializationInfo(out info);
@@ -82,7 +82,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         [Test]
         public void TryGetMemberSerializationInfo_should_return_expected_result_for_int_member()
         {
-            var subject = new JsonDotNetSerializer<C>();
+            var subject = new JsonSerializerAdapter<C>();
 
             BsonSerializationInfo info;
             var result = subject.TryGetMemberSerializationInfo("N", out info);
@@ -90,14 +90,14 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
             result.Should().BeTrue();
             info.ElementName.Should().Be("n");
             info.NominalType.Should().Be(typeof(int));
-            info.Serializer.Should().BeOfType<JsonDotNetSerializer<int>>();
+            info.Serializer.Should().BeOfType<JsonSerializerAdapter<int>>();
             info.Serializer.ValueType.Should().Be(typeof(int));
         }
 
         [Test]
         public void TryGetMemberSerializationInfo_should_return_expected_result_for_nested_document_member()
         {
-            var subject = new JsonDotNetSerializer<C>();
+            var subject = new JsonSerializerAdapter<C>();
 
             BsonSerializationInfo info1;
             var result1 = subject.TryGetMemberSerializationInfo("D", out info1);
@@ -105,7 +105,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
             result1.Should().BeTrue();
             info1.ElementName.Should().Be("d");
             info1.NominalType.Should().Be(typeof(D));
-            info1.Serializer.Should().BeOfType<JsonDotNetSerializer<D>>();
+            info1.Serializer.Should().BeOfType<JsonSerializerAdapter<D>>();
             info1.Serializer.ValueType.Should().Be(typeof(D));
 
             BsonSerializationInfo info2;
@@ -114,14 +114,14 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
             result2.Should().BeTrue();
             info2.ElementName.Should().Be("b");
             info2.NominalType.Should().Be(typeof(bool));
-            info2.Serializer.Should().BeOfType<JsonDotNetSerializer<bool>>();
+            info2.Serializer.Should().BeOfType<JsonSerializerAdapter<bool>>();
             info2.Serializer.ValueType.Should().Be(typeof(bool));
         }
 
         [Test]
         public void TryGetMemberSerializationInfo_should_return_expected_result_for_string_member()
         {
-            var subject = new JsonDotNetSerializer<C>();
+            var subject = new JsonSerializerAdapter<C>();
 
             BsonSerializationInfo info;
             var result = subject.TryGetMemberSerializationInfo("S", out info);
@@ -129,14 +129,14 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
             result.Should().BeTrue();
             info.ElementName.Should().Be("s");
             info.NominalType.Should().Be(typeof(string));
-            info.Serializer.Should().BeOfType<JsonDotNetSerializer<string>>();
+            info.Serializer.Should().BeOfType<JsonSerializerAdapter<string>>();
             info.Serializer.ValueType.Should().Be(typeof(string));
         }
 
         [Test]
         public void TryGetMemberSerializationInfo_should_return_false_for_non_existent_member()
         {
-            var subject = new JsonDotNetSerializer<C>();
+            var subject = new JsonSerializerAdapter<C>();
 
             BsonSerializationInfo info;
             var result = subject.TryGetMemberSerializationInfo("X", out info);
@@ -148,7 +148,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         [Test]
         public void TryGetMemberSerializationInfo_should_return_false_when_class_has_converter()
         {
-            var subject = new JsonDotNetSerializer<E>();
+            var subject = new JsonSerializerAdapter<E>();
 
             BsonSerializationInfo info;
             Action action = () => subject.TryGetMemberSerializationInfo("F", out info);

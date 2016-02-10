@@ -91,15 +91,15 @@
     <Compile Include="Helpers\FluentAssertions\BsonDocumentAssertions.cs" />
     <Compile Include="Helpers\FluentAssertions\BsonValueAssertions.cs" />
     <Compile Include="JsonDotNetSerializationProviderTests.cs" />
-    <Compile Include="JsonDotNetSerializerTests.cs" />
-    <Compile Include="JsonDotNetSerializer\JsonDotNetSerializerTests.cs" />
-    <Compile Include="JsonDotNetSerializer\JsonDotNetSerializerTestsBase.cs" />
+    <Compile Include="JsonSerializerAdapterTests.cs" />
+    <Compile Include="JsonSerializerAdapter\JsonSerializerAdapterTests.cs" />
+    <Compile Include="JsonSerializerAdapter\JsonSerializerAdapterTestsBase.cs" />
     <Compile Include="JsonReaderAdapterTests.cs" />
     <Compile Include="JsonReaderBaseTests.cs" />
     <Compile Include="JsonWriterAdapterTests.cs" />
     <Compile Include="JTokenAssertions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="JsonDotNetSerializer\JsonDotNetSerializerJValueTests.cs" />
+    <Compile Include="JsonSerializerAdapter\JsonSerializerAdapterJValueTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

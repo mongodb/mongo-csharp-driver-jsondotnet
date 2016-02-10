@@ -71,7 +71,7 @@
     <Compile Include="Converters\JsonConverterBase.cs" />
     <Compile Include="Converters\ObjectIdConverter.cs" />
     <Compile Include="JsonDotNetSerializationProvider.cs" />
-    <Compile Include="JsonDotNetSerializer.cs" />
+    <Compile Include="JsonSerializerAdapter.cs" />
     <Compile Include="JsonReaderAdapter.cs" />
     <Compile Include="JsonReaderBase.cs" />
     <Compile Include="JsonTokenExtensions.cs" />
