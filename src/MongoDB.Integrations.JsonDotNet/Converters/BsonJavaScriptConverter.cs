@@ -32,7 +32,7 @@ namespace MongoDB.Integrations.JsonDotNet.Converters
         // public methods
         public override object ReadJson(Newtonsoft.Json.JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
-            var adapter = reader as JsonReaderAdapter;
+            var adapter = reader as BsonReaderAdapter;
             if (adapter != null && adapter.BsonValue != null && adapter.BsonValue.BsonType == BsonType.JavaScript)
             {
                 return (BsonJavaScript)adapter.BsonValue;
@@ -65,7 +65,7 @@ namespace MongoDB.Integrations.JsonDotNet.Converters
             {
                 var bsonJavaScript = (BsonJavaScript)value;
 
-                var adapter = writer as JsonWriterAdapter;
+                var adapter = writer as BsonWriterAdapter;
                 if (adapter != null)
                 {
                     adapter.WriteJavaScript(bsonJavaScript.Code);

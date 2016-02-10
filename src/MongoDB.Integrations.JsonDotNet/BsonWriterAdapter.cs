@@ -1,4 +1,4 @@
-﻿/* Copyright 2015 MongoDB Inc.
+﻿/* Copyright 2015-2016 MongoDB Inc.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -20,13 +20,13 @@ using MongoDB.Bson.IO;
 
 namespace MongoDB.Integrations.JsonDotNet
 {
-    internal class JsonWriterAdapter : Newtonsoft.Json.JsonWriter
+    internal class BsonWriterAdapter : Newtonsoft.Json.JsonWriter
     {
         // private fields
         private readonly IBsonWriter _wrappedWriter;
 
         // constructors
-        public JsonWriterAdapter(IBsonWriter wrappedWriter)
+        public BsonWriterAdapter(IBsonWriter wrappedWriter)
         {
             _wrappedWriter = wrappedWriter;
         }

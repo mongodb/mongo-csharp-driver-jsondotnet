@@ -1,4 +1,4 @@
-﻿/* Copyright 2015 MongoDB Inc.
+﻿/* Copyright 2015-2016 MongoDB Inc.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -21,13 +21,13 @@ using MongoDB.Bson.Serialization.Serializers;
 
 namespace MongoDB.Integrations.JsonDotNet
 {
-    internal class JsonReaderAdapter : JsonReaderBase
+    internal class BsonReaderAdapter : JsonReaderBase
     {
         // private fields
         private readonly IBsonReader _wrappedReader;
 
         // constructors
-        public JsonReaderAdapter(IBsonReader wrappedReader)
+        public BsonReaderAdapter(IBsonReader wrappedReader)
         {
             _wrappedReader = wrappedReader;
         }

@@ -94,9 +94,9 @@
     <Compile Include="JsonSerializerAdapterTests.cs" />
     <Compile Include="JsonSerializerAdapter\JsonSerializerAdapterTests.cs" />
     <Compile Include="JsonSerializerAdapter\JsonSerializerAdapterTestsBase.cs" />
-    <Compile Include="JsonReaderAdapterTests.cs" />
+    <Compile Include="BsonReaderAdapterTests.cs" />
     <Compile Include="JsonReaderBaseTests.cs" />
-    <Compile Include="JsonWriterAdapterTests.cs" />
+    <Compile Include="BsonWriterAdapterTests.cs" />
     <Compile Include="JTokenAssertions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="JsonSerializerAdapter\JsonSerializerAdapterJValueTests.cs" />

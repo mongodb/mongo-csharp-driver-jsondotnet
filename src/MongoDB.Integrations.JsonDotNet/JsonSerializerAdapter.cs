@@ -61,13 +61,13 @@ namespace MongoDB.Integrations.JsonDotNet
         // public methods
         public override TValue Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
         {
-            var readerAdapter = new JsonReaderAdapter(context.Reader);
+            var readerAdapter = new BsonReaderAdapter(context.Reader);
             return (TValue)_wrappedSerializer.Deserialize(readerAdapter, args.NominalType);
         }
 
         public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, TValue value)
         {
-            var writerAdapter = new JsonWriterAdapter(context.Writer);
+            var writerAdapter = new BsonWriterAdapter(context.Writer);
             _wrappedSerializer.Serialize(writerAdapter, value, args.NominalType);
         }
 

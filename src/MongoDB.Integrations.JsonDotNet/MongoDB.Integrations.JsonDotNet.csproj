@@ -72,10 +72,10 @@
     <Compile Include="Converters\ObjectIdConverter.cs" />
     <Compile Include="JsonDotNetSerializationProvider.cs" />
     <Compile Include="JsonSerializerAdapter.cs" />
-    <Compile Include="JsonReaderAdapter.cs" />
+    <Compile Include="BsonReaderAdapter.cs" />
     <Compile Include="JsonReaderBase.cs" />
     <Compile Include="JsonTokenExtensions.cs" />
-    <Compile Include="JsonWriterAdapter.cs" />
+    <Compile Include="BsonWriterAdapter.cs" />
     <Compile Include="MongoContainerType.cs" />
     <Compile Include="MongoPosition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

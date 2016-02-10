@@ -49,7 +49,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         {
             var wrappedReader = Substitute.For<IBsonReader>();
 
-            var result = new JsonReaderAdapter(wrappedReader);
+            var result = new BsonReaderAdapter(wrappedReader);
 
             result.BsonValue.Should().BeNull();
             result.Depth.Should().Be(0);
@@ -368,7 +368,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         private JsonReaderBase CreateSubject(string json)
         {
             var wrappedReader = new JsonReader(json);
-            return new JsonReaderAdapter(wrappedReader);
+            return new BsonReaderAdapter(wrappedReader);
         }
     }
 }

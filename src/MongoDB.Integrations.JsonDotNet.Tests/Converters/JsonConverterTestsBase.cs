@@ -92,7 +92,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.Converters
             var readerSettings = new BsonBinaryReaderSettings { GuidRepresentation = guidRepresentation };
             using (var stream = new MemoryStream(bson))
             using (var wrappedReader = new BsonBinaryReader(stream, readerSettings))
-            using (var reader = new JsonReaderAdapter(wrappedReader))
+            using (var reader = new BsonReaderAdapter(wrappedReader))
             {
                 return ReadJson<T>(converter, reader, mustBeNested);
             }
@@ -101,7 +101,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.Converters
         protected T ReadJsonUsingWrappedJsonReader<T>(Newtonsoft.Json.JsonConverter converter, string json, bool mustBeNested = false)
         {
             using (var wrappedReader = new JsonReader(json))
-            using (var reader = new JsonReaderAdapter(wrappedReader))
+            using (var reader = new BsonReaderAdapter(wrappedReader))
             {
                 return ReadJson<T>(converter, reader, mustBeNested);
             }
@@ -156,7 +156,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.Converters
 
             using (var stream = new MemoryStream())
             using (var wrappedWriter = new BsonBinaryWriter(stream, wrappedWriterSettings))
-            using (var writer = new JsonWriterAdapter(wrappedWriter))
+            using (var writer = new BsonWriterAdapter(wrappedWriter))
             {
                 WriteJson(converter, value, writer, mustBeNested);
                 return stream.ToArray();
@@ -167,7 +167,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.Converters
         {
             using (var stringWriter = new StringWriter())
             using (var wrappedWriter = new JsonWriter(stringWriter))
-            using (var writer = new JsonWriterAdapter(wrappedWriter))
+            using (var writer = new BsonWriterAdapter(wrappedWriter))
             {
                 WriteJson(converter, value, writer);
                 return stringWriter.ToString();

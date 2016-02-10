@@ -72,7 +72,7 @@ namespace MongoDB.Integrations.JsonDotNet.Converters
             BsonType bsonType;
             if (objectType == typeof(BsonValue))
             {
-                var adapter = reader as JsonReaderAdapter;
+                var adapter = reader as BsonReaderAdapter;
                 if (adapter != null && adapter.BsonValue != null)
                 {
                     bsonType = adapter.BsonValue.BsonType;

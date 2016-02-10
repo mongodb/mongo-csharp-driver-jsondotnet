@@ -1,4 +1,4 @@
-﻿/* Copyright 2015 MongoDB Inc.
+﻿/* Copyright 2015-2016 MongoDB Inc.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -24,14 +24,14 @@ using NUnit.Framework;
 namespace MongoDB.Integrations.JsonDotNet.Tests
 {
     [TestFixture]
-    public class JsonReaderAdapterTests
+    public class BsonReaderAdapterTests
     {
         [TestCase(false)]
         [TestCase(true)]
         public void Close_should_close_wrapped_reader_when_CloseInput_is_true(bool closeInput)
         {
             var wrappedReader = Substitute.For<IBsonReader>();
-            var subject = new JsonReaderAdapter(wrappedReader);
+            var subject = new BsonReaderAdapter(wrappedReader);
             subject.CloseInput = closeInput;
 
             subject.Close();
@@ -44,9 +44,9 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         {
             var wrappedReader = Substitute.For<IBsonReader>();
 
-            var result = new JsonReaderAdapter(wrappedReader);
+            var result = new BsonReaderAdapter(wrappedReader);
 
-            result.Should().BeOfType<JsonReaderAdapter>();
+            result.Should().BeOfType<BsonReaderAdapter>();
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         {
             var document = new BsonDocument();
             var wrappedReader = new BsonDocumentReader(document);
-            var subject = new JsonReaderAdapter(wrappedReader);
+            var subject = new BsonReaderAdapter(wrappedReader);
             subject.Read(); // StartObject
             subject.Read(); // EndObject
             wrappedReader.State.Should().Be(BsonReaderState.Done);
@@ -211,10 +211,10 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         }
 
         // private methods
-        private JsonReaderAdapter CreateSubject(string json)
+        private BsonReaderAdapter CreateSubject(string json)
         {
             var wrappedReader = new JsonReader(json);
-            return new JsonReaderAdapter(wrappedReader);
+            return new BsonReaderAdapter(wrappedReader);
         }
 
         private object ParseExpectedValue(object value)

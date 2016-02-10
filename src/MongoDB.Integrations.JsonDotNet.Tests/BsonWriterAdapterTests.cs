@@ -1,4 +1,4 @@
-﻿/* Copyright 2015 MongoDB Inc.
+﻿/* Copyright 2015-2016 MongoDB Inc.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -26,14 +26,14 @@ using NUnit.Framework;
 namespace MongoDB.Integrations.JsonDotNet.Tests
 {
     [TestFixture]
-    public class JsonWriterAdapterTests
+    public class BsonWriterAdapterTests
     {
         [TestCase(false)]
         [TestCase(true)]
         public void Close_should_close_wrapped_writer_when_CloseOutput_is_true(bool closeOutput)
         {
             var wrappedWriter = Substitute.For<IBsonWriter>();
-            var subject = new JsonWriterAdapter(wrappedWriter);
+            var subject = new BsonWriterAdapter(wrappedWriter);
             subject.CloseOutput = closeOutput;
 
             subject.Close();
@@ -46,7 +46,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         {
             var wrappedWriter = Substitute.For<IBsonWriter>();
 
-            var result = new JsonWriterAdapter(wrappedWriter);
+            var result = new BsonWriterAdapter(wrappedWriter);
 
             result.WrappedWriter.Should().BeSameAs(wrappedWriter);
         }
@@ -55,7 +55,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         public void Flush_should_flush_wrapped_writer()
         {
             var wrappedWriter = Substitute.For<IBsonWriter>();
-            var subject = new JsonWriterAdapter(wrappedWriter);
+            var subject = new BsonWriterAdapter(wrappedWriter);
 
             subject.Flush();
 
@@ -66,7 +66,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         public void WrappedWriter_get_should_return_expected_result()
         {
             var wrappedWriter = Substitute.For<IBsonWriter>();
-            var subject = new JsonWriterAdapter(wrappedWriter);
+            var subject = new BsonWriterAdapter(wrappedWriter);
 
             var result = subject.WrappedWriter;
 
@@ -561,7 +561,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         }
 
         // private methods
-        private void AssertBsonEquals(JsonWriterAdapter adapter, string json)
+        private void AssertBsonEquals(BsonWriterAdapter adapter, string json)
         {
             var wrappedWriter = (BsonBinaryWriter)adapter.WrappedWriter;
             var stream = (MemoryStream)wrappedWriter.BaseStream;
@@ -578,14 +578,14 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
             bson.Should().Equal(expectedBson);
         }
 
-        private JsonWriterAdapter CreateSubject()
+        private BsonWriterAdapter CreateSubject()
         {
             var stream = new MemoryStream();
             var wrappedWriter = new BsonBinaryWriter(stream);
-            return new JsonWriterAdapter(wrappedWriter);
+            return new BsonWriterAdapter(wrappedWriter);
         }
 
-        private void WriteNested(JsonWriterAdapter adapter, Action writer)
+        private void WriteNested(BsonWriterAdapter adapter, Action writer)
         {
             adapter.WriteStartObject();
             adapter.WritePropertyName("x");
