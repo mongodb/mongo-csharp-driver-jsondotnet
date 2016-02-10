@@ -16,7 +16,7 @@
 
 namespace MongoDB.Integrations.JsonDotNet
 {
-    public static class JsonTokenExtensions
+    internal static class JsonTokenExtensions
     {
         public static bool IsPrimitive(this Newtonsoft.Json.JsonToken token)
         {

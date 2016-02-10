@@ -20,7 +20,7 @@ using MongoDB.Bson.IO;
 
 namespace MongoDB.Integrations.JsonDotNet
 {
-    public class JsonWriterAdapter : Newtonsoft.Json.JsonWriter
+    internal class JsonWriterAdapter : Newtonsoft.Json.JsonWriter
     {
         // private fields
         private readonly IBsonWriter _wrappedWriter;
