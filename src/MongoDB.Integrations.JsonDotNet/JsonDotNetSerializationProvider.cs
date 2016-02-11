@@ -37,7 +37,7 @@ namespace MongoDB.Integrations.JsonDotNet
                 throw new ArgumentNullException(nameof(predicate));
             }
             _predicate = predicate;
-            _wrappedSerializer = wrappedSerializer ?? JsonSerializerAdapter.CreateWrappedSerializer();
+            _wrappedSerializer = wrappedSerializer ?? JsonSerializerAdapterHelper.CreateDefaultJsonSerializer();
         }
 
         // public properties

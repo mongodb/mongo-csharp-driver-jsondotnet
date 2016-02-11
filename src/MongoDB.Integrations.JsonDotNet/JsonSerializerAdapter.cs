@@ -25,10 +25,10 @@ using System.Collections.Generic;
 
 namespace MongoDB.Integrations.JsonDotNet
 {
-    public static class JsonSerializerAdapter
+    internal static class JsonSerializerAdapterHelper
     {
-        // private static methods
-        public static Newtonsoft.Json.JsonSerializer CreateWrappedSerializer()
+        // public static methods
+        public static Newtonsoft.Json.JsonSerializer CreateDefaultJsonSerializer()
         {
             var serializer = new Newtonsoft.Json.JsonSerializer();
             serializer.Converters.Add(BsonValueConverter.Instance);
@@ -44,7 +44,7 @@ namespace MongoDB.Integrations.JsonDotNet
 
         // constructors
         public JsonSerializerAdapter()
-            : this(JsonSerializerAdapter.CreateWrappedSerializer())
+            : this(JsonSerializerAdapterHelper.CreateDefaultJsonSerializer())
         {
         }
 
