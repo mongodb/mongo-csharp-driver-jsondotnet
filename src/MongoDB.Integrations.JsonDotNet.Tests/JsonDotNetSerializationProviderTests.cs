@@ -29,12 +29,14 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
     public class JsonDotNetSerializationProviderTests
     {
         [Test]
-        public void constructor_should_initialize_instance()
+        public void constructor_should_throw_when_predicate_is_null()
         {
-            var result = new JsonDotNetSerializationProvider();
+            Func<Type, bool> predicate = null;
+            var wrappedSerializer = Substitute.For<Newtonsoft.Json.JsonSerializer>();
 
-            result.Predicate.Should().NotBeNull();
-            result.WrappedSerializer.Should().NotBeNull();
+            Action action = () => new JsonDotNetSerializationProvider(predicate, wrappedSerializer);
+
+            action.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("predicate");
         }
 
         [Test]
@@ -42,40 +44,29 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         {
             Func<Type, bool> predicate = t => true;
 
-            var result = new JsonDotNetSerializationProvider(predicate: predicate);
+            var result = new JsonDotNetSerializationProvider(predicate);
 
             result.Predicate.Should().BeSameAs(predicate);
             result.WrappedSerializer.Should().NotBeNull();
         }
 
         [Test]
-        public void constructor_with_wrappedSerializer_and_predicate__should_initialize_instance()
+        public void constructor_with_predicate_and_wrappedSerializer_should_initialize_instance()
         {
             Func<Type, bool> predicate = t => true;
             var wrappedSerializer = Substitute.For<Newtonsoft.Json.JsonSerializer>();
 
-            var result = new JsonDotNetSerializationProvider(wrappedSerializer: wrappedSerializer, predicate: predicate);
+            var result = new JsonDotNetSerializationProvider(predicate, wrappedSerializer);
 
             result.Predicate.Should().BeSameAs(predicate);
             result.WrappedSerializer.Should().BeSameAs(wrappedSerializer);
         }
 
         [Test]
-        public void constructor_with_wrappedSerializer_should_initialize_instance()
-        {
-            var wrappedSerializer = Substitute.For<Newtonsoft.Json.JsonSerializer>();
-
-            var result = new JsonDotNetSerializationProvider(wrappedSerializer: wrappedSerializer);
-
-            result.Predicate.Should().NotBeNull();
-            result.WrappedSerializer.Should().BeSameAs(wrappedSerializer);
-        }
-
-        [Test]
-        public void GetSerializer_should_return_null_when_predicate_is_false()
+        public void GetSerializer_should_return_null_when_predicate_returns_false()
         {
             Func<Type, bool> predicate = t => false;
-            var subject = new JsonDotNetSerializationProvider(predicate: predicate);
+            var subject = new JsonDotNetSerializationProvider(predicate);
 
             var result = subject.GetSerializer(typeof(BsonValue));
 
@@ -86,7 +77,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         public void GetSerializer_should_return_null_when_type_is_assignable_to_BsonValue()
         {
             Func<Type, bool> predicate = t => true;
-            var subject = new JsonDotNetSerializationProvider(predicate: predicate);
+            var subject = new JsonDotNetSerializationProvider(predicate);
 
             var result = subject.GetSerializer(typeof(BsonValue));
 
@@ -94,10 +85,10 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         }
 
         [Test]
-        public void GetSerializer_should_return_serializer_when_predicate_is_true()
+        public void GetSerializer_should_return_serializer_when_predicate_returns_true()
         {
             Func<Type, bool> predicate = t => true;
-            var subject = new JsonDotNetSerializationProvider(predicate: predicate);
+            var subject = new JsonDotNetSerializationProvider(predicate);
 
             var result = subject.GetSerializer(typeof(Version));
 
@@ -108,7 +99,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         public void Predicate_get_should_return_expected_result()
         {
             Func<Type, bool> predicate = t => true;
-            var subject = new JsonDotNetSerializationProvider(predicate: predicate);
+            var subject = new JsonDotNetSerializationProvider(predicate);
 
             var result = subject.Predicate;
 
@@ -118,8 +109,9 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         [Test]
         public void WrappedSerializer_get_should_return_expected_result()
         {
+            Func<Type, bool> predicate = t => true;
             var wrappedSerializer = Substitute.For<Newtonsoft.Json.JsonSerializer>();
-            var subject = new JsonDotNetSerializationProvider(wrappedSerializer: wrappedSerializer);
+            var subject = new JsonDotNetSerializationProvider(predicate, wrappedSerializer);
 
             var result = subject.WrappedSerializer;
 

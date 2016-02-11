@@ -30,10 +30,14 @@ namespace MongoDB.Integrations.JsonDotNet
         private readonly Newtonsoft.Json.JsonSerializer _wrappedSerializer;
 
         // constructors
-        public JsonDotNetSerializationProvider(Newtonsoft.Json.JsonSerializer wrappedSerializer = null, Func<Type, bool> predicate = null)
+        public JsonDotNetSerializationProvider(Func<Type, bool> predicate, Newtonsoft.Json.JsonSerializer wrappedSerializer = null)
         {
+            if (predicate == null)
+            {
+                throw new ArgumentNullException(nameof(predicate));
+            }
+            _predicate = predicate;
             _wrappedSerializer = wrappedSerializer ?? JsonSerializerAdapter.CreateWrappedSerializer();
-            _predicate = predicate ?? (t => true);
         }
 
         // public properties
