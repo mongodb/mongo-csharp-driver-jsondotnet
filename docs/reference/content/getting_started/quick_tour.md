@@ -4,7 +4,7 @@ draft = false
 title = "Quick Tour"
 [menu.main]
   parent = "Getting Started"
-  weight = 30
+  weight = 40
   identifier = "Quick Tour"
   pre = "<i class='fa'></i>"
 +++
