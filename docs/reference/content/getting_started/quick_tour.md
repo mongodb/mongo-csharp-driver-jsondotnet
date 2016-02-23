@@ -42,6 +42,7 @@ The predicate for that would be:
 Func<Type, bool> predicate = t => t.FullName.StartsWith("MyApplication.");
 ```
 
+{{% note %}}
 It might help to have a mental model of how the .NET Driver chooses which serializer to use for a type.
 
 When the driver needs to serializer for a type `T`, it consults the global serializer registry to see if it
@@ -55,6 +56,7 @@ satisfied from the global serializer registry.
 
 What the above code is doing is registering an additional serialization provider that returns a Json.NET
 based serializer for any type for which the predicate returns true. 
+{{% /note %}}
 
 ## Manually configuring a `JsonSerializerAdapter`
 
@@ -87,7 +89,7 @@ var myClassSerializer = new JsonSerializerAdapter<MyClass>(jsonSerializer);
 BsonSerializer.RegisterSerializer<MyClass>(myClassSerializer);
 ```
 
-Note that while a .NET Driver serializer is for a specific type `T`, a `JsonSerializer` can actually be used
+While a .NET Driver serializer is for a specific type `T`, a `JsonSerializer` can actually be used
 for any number of types. What this means is that you can use the same instance of a `JsonSerializer` with
 multiple `JsonSerializerAdapters`. So if you have two classes, `MyClass1` and `MyClass2`, they can share
 a single underlying `JsonSerializer`.
