@@ -16,6 +16,8 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Text;
 using MongoDB.Bson;
 
 namespace MongoDB.Integrations.JsonDotNet
@@ -46,7 +48,13 @@ namespace MongoDB.Integrations.JsonDotNet
         {
             get
             {
-                return _positionsStack.Count;
+                var depth = _positionsStack.Count();
+
+                // depth shouldn't increase until after the start token
+                if (TokenType == Newtonsoft.Json.JsonToken.StartObject || TokenType == Newtonsoft.Json.JsonToken.StartArray)
+                    depth -= 1;
+
+                return depth;
             }
         }
 
@@ -54,8 +62,20 @@ namespace MongoDB.Integrations.JsonDotNet
         {
             get
             {
-                // TODO: implement Path
-                return "path";
+                var sb = new StringBuilder();
+                foreach (var position in _positionsStack.Reverse().Concat(new[] { _currentPosition }))
+                {
+                    if (null != position.PropertyName)
+                    {
+                        if (sb.Length > 0)
+                            sb.Append(".");
+                        sb.Append(position.PropertyName);
+                    }
+
+                    if (position.HasIndex && position.Position >= 0)
+                        sb.Append(string.Format("[{0}]", position.Position));
+                }
+                return sb.ToString();
             }
         }
 

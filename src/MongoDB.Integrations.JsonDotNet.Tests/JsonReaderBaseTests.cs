@@ -58,7 +58,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
             result.BsonValue.Should().BeNull();
         }
 
-        [TestCase("{ x : { y : 2 } }", new [] { 0, 1, 1, 2, 2, 2, 1, 0 })]
+        [TestCase("{ x : { y : 2 } }", new [] { 0, 0, 1, 1, 2, 2, 1, 0 })]
         public void Depth_should_return_expected_result(string json, int[] expectedResults)
         {
             var subject = CreateSubject(json);
