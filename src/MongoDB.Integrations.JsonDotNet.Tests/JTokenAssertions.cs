@@ -41,7 +41,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         {
             Execute.Assertion
                 .BecauseOf(because, reasonArgs)
-                .ForCondition(Subject.IsSameOrEqualTo(expected))
+                .ForCondition(Subject.ToString().IsSameOrEqualTo(expected.ToString()))
                 .FailWith("Expected {context:object} to be {0}{reason}, but found {1}.", expected, Subject);
 
             return new AndConstraint<JTokenAssertions>(this);
