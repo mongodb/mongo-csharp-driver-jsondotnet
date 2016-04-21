@@ -79,7 +79,8 @@ namespace MongoDB.Integrations.JsonDotNet
             var arrayContract = contract as JsonArrayContract;
             if (arrayContract == null)
             {
-                throw new BsonSerializationException($"The Json.NET contract for type \"{valueType.Name}\" is not a JsonArrayContract.");
+                serializationInfo = null;
+                return false;
             }
             if (arrayContract.Converter != null)
             {
@@ -111,7 +112,8 @@ namespace MongoDB.Integrations.JsonDotNet
             var objectContract = contract as JsonObjectContract;
             if (objectContract == null)
             {
-                throw new BsonSerializationException($"The Json.NET contract for type \"{valueType.Name}\" is not a JsonObjectContract.");
+                serializationInfo = null;
+                return false;
             }
             if (objectContract.Converter != null)
             {
