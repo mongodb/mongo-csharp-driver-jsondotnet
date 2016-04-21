@@ -65,7 +65,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
             BsonSerializationInfo info;
             Action action = () => subject.TryGetItemSerializationInfo(out info);
 
-            action.ShouldThrow<BsonSerializationException>().And.Message.Contains("has a Converter");
+            action.ShouldThrow<BsonSerializationException>().And.Message.Should().Contain("has a Converter");
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
             BsonSerializationInfo info;
             Action action = () => subject.TryGetItemSerializationInfo(out info);
 
-            action.ShouldThrow<BsonSerializationException>().And.Message.Contains("is not a JsonArrayContract");
+            action.ShouldThrow<BsonSerializationException>().And.Message.Should().Contain("is not a JsonArrayContract");
         }
 
         [Test]
