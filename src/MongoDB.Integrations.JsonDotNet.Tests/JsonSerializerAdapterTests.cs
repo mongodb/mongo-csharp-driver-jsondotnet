@@ -51,14 +51,14 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         public void TryGetItemSerializationInfo_should_throw_when_contract_has_a_converter()
         {
             var wrappedSerializer = new Newtonsoft.Json.JsonSerializer();
-            var intContract = new Newtonsoft.Json.Serialization.JsonPrimitiveContract(typeof(int))
+            var intContract = new Newtonsoft.Json.Serialization.JsonArrayContract(typeof(int[]))
             {
                 Converter = Substitute.For<Newtonsoft.Json.JsonConverter>()
             };
             wrappedSerializer.ContractResolver = new DictionaryContractResolver(
                 new Dictionary<Type, JsonContract>
                 {
-                    { typeof(int), intContract }
+                    { typeof(int[]), intContract }
                 });
             var subject = new JsonSerializerAdapter<int[]>(wrappedSerializer);
 
@@ -69,14 +69,13 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         }
 
         [Test]
-        public void TryGetItemSerializationInfo_should_throw_when_contract_is_not_an_array_contract()
+        public void TryGetItemSerializationInfo_should_return_false_when_contract_is_not_an_array_contract()
         {
             var subject = new JsonSerializerAdapter<C>();
 
             BsonSerializationInfo info;
-            Action action = () => subject.TryGetItemSerializationInfo(out info);
-
-            action.ShouldThrow<BsonSerializationException>().And.Message.Should().Contain("is not a JsonArrayContract");
+            var result = subject.TryGetItemSerializationInfo(out info);
+            result.Should().BeFalse();
         }
 
         [Test]
