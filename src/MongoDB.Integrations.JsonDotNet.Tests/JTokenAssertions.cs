@@ -1,4 +1,4 @@
-﻿/* Copyright 2015 MongoDB Inc.
+﻿/* Copyright 2015-2016 MongoDB Inc.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         {
             Execute.Assertion
                 .BecauseOf(because, reasonArgs)
-                .ForCondition(Subject.ToString().IsSameOrEqualTo(expected.ToString()))
+                .ForCondition(Newtonsoft.Json.Linq.JToken.DeepEquals(Subject, expected))
                 .FailWith("Expected {context:object} to be {0}{reason}, but found {1}.", expected, Subject);
 
             return new AndConstraint<JTokenAssertions>(this);
@@ -51,7 +51,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         {
             Execute.Assertion
                 .BecauseOf(because, reasonArgs)
-                .ForCondition(!Subject.IsSameOrEqualTo(unexpected))
+                .ForCondition(!Newtonsoft.Json.Linq.JToken.DeepEquals(Subject, unexpected))
                 .FailWith("Did not expect {context:object} to be equal to {0}{reason}.", unexpected);
 
             return new AndConstraint<JTokenAssertions>(this);

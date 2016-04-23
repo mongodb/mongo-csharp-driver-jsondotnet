@@ -1,4 +1,4 @@
-﻿/* Copyright 2015 MongoDB Inc.
+﻿/* Copyright 2015-2016 MongoDB Inc.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -52,7 +52,9 @@ namespace MongoDB.Integrations.JsonDotNet
 
                 // depth shouldn't increase until after the start token
                 if (TokenType == Newtonsoft.Json.JsonToken.StartObject || TokenType == Newtonsoft.Json.JsonToken.StartArray)
+                {
                     depth -= 1;
+                }
 
                 return depth;
             }
@@ -65,15 +67,19 @@ namespace MongoDB.Integrations.JsonDotNet
                 var sb = new StringBuilder();
                 foreach (var position in _positionsStack.Reverse().Concat(new[] { _currentPosition }))
                 {
-                    if (null != position.PropertyName)
+                    if (position.PropertyName != null)
                     {
                         if (sb.Length > 0)
+                        {
                             sb.Append(".");
+                        }
                         sb.Append(position.PropertyName);
                     }
 
                     if (position.HasIndex && position.Position >= 0)
+                    {
                         sb.Append(string.Format("[{0}]", position.Position));
+                    }
                 }
                 return sb.ToString();
             }

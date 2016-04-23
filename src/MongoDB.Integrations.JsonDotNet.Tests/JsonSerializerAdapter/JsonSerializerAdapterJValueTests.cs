@@ -38,7 +38,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests.JsonSerializerAdapter
         [TestCase("BsonSymbol", "{ x : { $symbol : \"abc\" } }")]
         [TestCase("BsonTimestamp", "{ x : { $timestamp : { t : 1, i : 2 } } }")]
         [TestCase("BsonUndefined", "{ x : undefined }")]
-        [TestCase("BsonComplex", "{x: { \"a\" : [], \"b\" : [] } }")]
+        [TestCase("BsonComplex", "{ x : { \"a\" : [], \"b\" : [] } }")]
         public void Deserialize_should_return_expected_result(string type, string json)
         {
             var subject = CreateSubject();

@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using FluentAssertions;
 using MongoDB.Bson;
@@ -58,7 +59,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
             result.BsonValue.Should().BeNull();
         }
 
-        [TestCase("{ x : { y : 2 } }", new [] { 0, 0, 1, 1, 2, 2, 1, 0 })]
+        [TestCase("{ x : { y : [[1], 2] } }", new [] { 0, 0, 1, 1, 2, 2, 3, 4, 3, 3, 2, 1, 0 })]
         public void Depth_should_return_expected_result(string json, int[] expectedResults)
         {
             var subject = CreateSubject(json);
@@ -67,6 +68,22 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
             do
             {
                 var result = subject.Depth;
+                results.Add(result);
+            }
+            while (subject.Read());
+
+            results.Should().Equal(expectedResults);
+        }
+
+        [TestCase("{ x : { y : [[1], 2] } }", new[] { "", "", "x", "x", "x.y", "x.y", "x.y[0]", "x.y[0][0]", "x.y[0]", "x.y[1]", "x.y", "x", "" })]
+        public void Path_should_return_expected_result(string json, string[] expectedResults)
+        {
+            var subject = CreateSubject(json);
+
+            var results = new List<string>();
+            do
+            {
+                var result = subject.Path;
                 results.Add(result);
             }
             while (subject.Read());
