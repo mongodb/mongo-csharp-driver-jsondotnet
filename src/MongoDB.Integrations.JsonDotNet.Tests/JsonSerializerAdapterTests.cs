@@ -21,8 +21,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -51,14 +49,14 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
         public void TryGetItemSerializationInfo_should_throw_when_contract_has_a_converter()
         {
             var wrappedSerializer = new Newtonsoft.Json.JsonSerializer();
-            var intContract = new Newtonsoft.Json.Serialization.JsonArrayContract(typeof(int[]))
+            var arrayContract = new Newtonsoft.Json.Serialization.JsonArrayContract(typeof(int[]))
             {
                 Converter = Substitute.For<Newtonsoft.Json.JsonConverter>()
             };
             wrappedSerializer.ContractResolver = new DictionaryContractResolver(
-                new Dictionary<Type, JsonContract>
+                new Dictionary<Type, Newtonsoft.Json.Serialization.JsonContract>
                 {
-                    { typeof(int[]), intContract }
+                    { typeof(int[]), arrayContract }
                 });
             var subject = new JsonSerializerAdapter<int[]>(wrappedSerializer);
 
@@ -75,6 +73,7 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
 
             BsonSerializationInfo info;
             var result = subject.TryGetItemSerializationInfo(out info);
+
             result.Should().BeFalse();
         }
 
@@ -188,12 +187,12 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
                 return objectType == typeof(E);
             }
 
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            public override object ReadJson(Newtonsoft.Json.JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
             {
                 throw new NotImplementedException();
             }
 
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            public override void WriteJson(Newtonsoft.Json.JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)
             {
                 throw new NotImplementedException();
             }
@@ -208,9 +207,9 @@ namespace MongoDB.Integrations.JsonDotNet.Tests
                 _contracts = contracts;
             }
 
-            public JsonContract ResolveContract(Type type)
+            public Newtonsoft.Json.Serialization.JsonContract ResolveContract(Type type)
             {
-                JsonContract contract;
+                Newtonsoft.Json.Serialization.JsonContract contract;
                 if (_contracts.TryGetValue(type, out contract))
                 {
                     return contract;

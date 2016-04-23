@@ -19,7 +19,6 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Bson;
 using System.Reflection;
-using Newtonsoft.Json.Serialization;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -76,7 +75,7 @@ namespace MongoDB.Integrations.JsonDotNet
             var valueType = typeof(TValue);
 
             var contract = _wrappedSerializer.ContractResolver.ResolveContract(valueType);
-            var arrayContract = contract as JsonArrayContract;
+            var arrayContract = contract as Newtonsoft.Json.Serialization.JsonArrayContract;
             if (arrayContract == null)
             {
                 serializationInfo = null;
@@ -109,7 +108,7 @@ namespace MongoDB.Integrations.JsonDotNet
 
             var valueType = typeof(TValue);
             var contract = _wrappedSerializer.ContractResolver.ResolveContract(valueType);
-            var objectContract = contract as JsonObjectContract;
+            var objectContract = contract as Newtonsoft.Json.Serialization.JsonObjectContract;
             if (objectContract == null)
             {
                 serializationInfo = null;
