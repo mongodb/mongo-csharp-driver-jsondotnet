@@ -12,6 +12,9 @@ TestResults
 # CodeReview
 codereview.rc
 
+# FAKE artifacts
+.fake
+
 # GhostDoc artifacts
 CSharpDriver.sln.GhostDoc.xml
 
