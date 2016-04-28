@@ -122,7 +122,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\MongoDB.Integrations.JsonDotNet\MongoDB.Integrations.JsonDotNet.csproj">
+    <ProjectReference Include="..\..\src\MongoDB.Integrations.JsonDotNet\MongoDB.Integrations.JsonDotNet.csproj">
       <Project>{bd207cf4-7494-4873-9d08-0fce1a6a3b3e}</Project>
       <Name>MongoDB.Integrations.JsonDotNet</Name>
     </ProjectReference>
