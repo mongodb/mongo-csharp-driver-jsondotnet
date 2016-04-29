@@ -1,4 +1,5 @@
 #r @"../tools/FAKE/tools/FakeLib.dll"
+#load "build-version.fs"
 
 open System
 open Fake
@@ -12,6 +13,12 @@ let binNet45Dir = binDir @@ "net45"
 let testResultsDir = artifactsDir @@ "test-results"
 
 let config = getBuildParamOrDefault "config" "Release"
+
+let version = getBuildParamOrDefault "version" "1.0.0"
+let preRelease = getBuildParamOrDefault "preRelease" "local"
+let buildNumber = getBuildParamOrDefault "buildNumber" (GetBuildNumber())
+let semVersion = GetSemVersion version preRelease buildNumber
+let assemblyVersion = version + "." + buildNumber
 
 // targets
 Target "Build" (fun _ ->
