@@ -36,17 +36,32 @@ namespace MongoDB.Integrations.JsonDotNet
         }
     }
 
+    /// <summary>
+    /// Represents an adapter that adapts a Json.NET serializer for use with the MongoDB driver.
+    /// </summary>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    /// <seealso cref="MongoDB.Bson.Serialization.Serializers.SerializerBase{TValue}" />
+    /// <seealso cref="MongoDB.Bson.Serialization.IBsonArraySerializer" />
+    /// <seealso cref="MongoDB.Bson.Serialization.IBsonDocumentSerializer" />
     public class JsonSerializerAdapter<TValue> : SerializerBase<TValue>, IBsonArraySerializer, IBsonDocumentSerializer
     {
         // private fields
         private readonly Newtonsoft.Json.JsonSerializer _wrappedSerializer;
 
         // constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonSerializerAdapter{TValue}"/> class.
+        /// </summary>
         public JsonSerializerAdapter()
             : this(JsonSerializerAdapterHelper.CreateDefaultJsonSerializer())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonSerializerAdapter{TValue}"/> class.
+        /// </summary>
+        /// <param name="wrappedSerializer">The wrapped serializer.</param>
+        /// <exception cref="System.ArgumentNullException">wrappedSerializer</exception>
         public JsonSerializerAdapter(Newtonsoft.Json.JsonSerializer wrappedSerializer)
         {
             if (wrappedSerializer == null)
@@ -58,18 +73,21 @@ namespace MongoDB.Integrations.JsonDotNet
         }
 
         // public methods
+        /// <inheritdoc/>
         public override TValue Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
         {
             var readerAdapter = new BsonReaderAdapter(context.Reader);
             return (TValue)_wrappedSerializer.Deserialize(readerAdapter, args.NominalType);
         }
 
+        /// <inheritdoc/>
         public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, TValue value)
         {
             var writerAdapter = new BsonWriterAdapter(context.Writer);
             _wrappedSerializer.Serialize(writerAdapter, value, args.NominalType);
         }
 
+        /// <inheritdoc/>
         public bool TryGetItemSerializationInfo(out BsonSerializationInfo serializationInfo)
         {
             var valueType = typeof(TValue);
@@ -102,6 +120,7 @@ namespace MongoDB.Integrations.JsonDotNet
             return true;
         }
 
+        /// <inheritdoc/>
         public bool TryGetMemberSerializationInfo(string memberName, out BsonSerializationInfo serializationInfo)
         {
             serializationInfo = null;

@@ -20,6 +20,10 @@ using MongoDB.Bson;
 
 namespace MongoDB.Integrations.JsonDotNet.Converters
 {
+    /// <summary>
+    /// Represents a JsonConverter for BsonValue values.
+    /// </summary>
+    /// <seealso cref="MongoDB.Integrations.JsonDotNet.Converters.JsonConverterBase{T}" />
     public class BsonValueConverter : JsonConverterBase<BsonValue>
     {
         #region static
@@ -55,6 +59,12 @@ namespace MongoDB.Integrations.JsonDotNet.Converters
         }
 
         // public static properties
+        /// <summary>
+        /// Gets a pre-created instance of a <see cref="BsonValueConverter"/>.
+        /// </summary>
+        /// <value>
+        /// A <see cref="BsonValueConverter"/>.
+        /// </value>
         public static BsonValueConverter Instance
         {
             get { return __instance; }
@@ -62,11 +72,13 @@ namespace MongoDB.Integrations.JsonDotNet.Converters
         #endregion
 
         // public methods
+        /// <inheritdoc/>
         public override bool CanConvert(Type objectType)
         {
             return typeof(BsonValue).IsAssignableFrom(objectType);
         }
 
+        /// <inheritdoc/>
         public override object ReadJson(Newtonsoft.Json.JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
             BsonType bsonType;
@@ -116,6 +128,7 @@ namespace MongoDB.Integrations.JsonDotNet.Converters
             }
         }
 
+        /// <inheritdoc/>
         public override void WriteJson(Newtonsoft.Json.JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)
         {
             if (value == null)

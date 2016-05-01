@@ -20,11 +20,21 @@ using MongoDB.Bson.Serialization.Serializers;
 
 namespace MongoDB.Integrations.JsonDotNet.Converters
 {
+    /// <summary>
+    /// Represents a JsonConverter for BsonJavaScriptWithScope values.
+    /// </summary>
+    /// <seealso cref="MongoDB.Integrations.JsonDotNet.Converters.JsonConverterBase{T}" />
     public class BsonJavaScriptWithScopeConverter : JsonConverterBase<BsonJavaScriptWithScope>
     {
         #region static
         private static readonly BsonJavaScriptWithScopeConverter __instance = new BsonJavaScriptWithScopeConverter();
 
+        /// <summary>
+        /// Gets a pre-created instance of a <see cref="BsonJavaScriptWithScopeConverter"/>.
+        /// </summary>
+        /// <value>
+        /// A <see cref="BsonJavaScriptWithScopeConverter"/>.
+        /// </value>
         public static BsonJavaScriptWithScopeConverter Instance
         {
             get { return __instance; }
@@ -32,6 +42,7 @@ namespace MongoDB.Integrations.JsonDotNet.Converters
         #endregion
 
         // public methods
+        /// <inheritdoc/>
         public override object ReadJson(Newtonsoft.Json.JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
             var adapter = reader as BsonReaderAdapter;
@@ -54,6 +65,7 @@ namespace MongoDB.Integrations.JsonDotNet.Converters
             }
         }
 
+        /// <inheritdoc/>
         public override void WriteJson(Newtonsoft.Json.JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)
         {
             if (value == null)

@@ -44,6 +44,7 @@ namespace MongoDB.Integrations.JsonDotNet
             get { return _bsonValue; }
         }
 
+        /// <inheritdoc/>
         public override int Depth
         {
             get
@@ -60,6 +61,7 @@ namespace MongoDB.Integrations.JsonDotNet
             }
         }
 
+        /// <inheritdoc/>
         public override string Path
         {
             get
@@ -85,16 +87,19 @@ namespace MongoDB.Integrations.JsonDotNet
             }
         }
 
+        /// <inheritdoc/>
         public override Newtonsoft.Json.JsonToken TokenType
         {
             get { return _tokenType; }
         }
 
+        /// <inheritdoc/>
         public override object Value
         {
             get { return _value; }
         }
 
+        /// <inheritdoc/>
         public override Type ValueType
         {
             get { return _value != null ? _value.GetType() : null; }
@@ -108,6 +113,7 @@ namespace MongoDB.Integrations.JsonDotNet
         }
 
         // public methods
+        /// <inheritdoc/>
         public override byte[] ReadAsBytes()
         {
             if (!ReadSkippingComments())
@@ -155,6 +161,7 @@ namespace MongoDB.Integrations.JsonDotNet
             }
         }
 
+        /// <inheritdoc/>
         public override DateTime? ReadAsDateTime()
         {
             if (!ReadSkippingComments())
@@ -198,6 +205,7 @@ namespace MongoDB.Integrations.JsonDotNet
             }
         }
 
+        /// <inheritdoc/>
         public override DateTimeOffset? ReadAsDateTimeOffset()
         {
             if (!ReadSkippingComments())
@@ -245,6 +253,7 @@ namespace MongoDB.Integrations.JsonDotNet
             }
         }
 
+        /// <inheritdoc/>
         public override decimal? ReadAsDecimal()
         {
             if (!ReadSkippingComments())
@@ -293,6 +302,7 @@ namespace MongoDB.Integrations.JsonDotNet
             }
         }
 
+        /// <inheritdoc/>
         public override int? ReadAsInt32()
         {
             if (!ReadSkippingComments())
@@ -345,6 +355,7 @@ namespace MongoDB.Integrations.JsonDotNet
             }
         }
 
+        /// <inheritdoc/>
         public override string ReadAsString()
         {
             if (!ReadSkippingComments())

@@ -39,6 +39,7 @@ namespace MongoDB.Integrations.JsonDotNet
         }
 
         // public methods
+        /// <inheritdoc/>
         public override void Close()
         {
             base.Close();
@@ -49,6 +50,7 @@ namespace MongoDB.Integrations.JsonDotNet
             }
         }
 
+        /// <inheritdoc/>
         public override bool Read()
         {
             switch (_wrappedReader.State)

@@ -23,6 +23,10 @@ using MongoDB.Bson.Serialization;
 
 namespace MongoDB.Integrations.JsonDotNet
 {
+    /// <summary>
+    /// Represents a serialization provider for Json.NET.
+    /// </summary>
+    /// <seealso cref="MongoDB.Bson.Serialization.IBsonSerializationProvider" />
     public class JsonDotNetSerializationProvider : IBsonSerializationProvider
     {
         // private fields
@@ -30,6 +34,11 @@ namespace MongoDB.Integrations.JsonDotNet
         private readonly Newtonsoft.Json.JsonSerializer _wrappedSerializer;
 
         // constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonDotNetSerializationProvider"/> class.
+        /// </summary>
+        /// <param name="predicate">The predicate.</param>
+        /// <param name="wrappedSerializer">The wrapped serializer.</param>
         public JsonDotNetSerializationProvider(Func<Type, bool> predicate, Newtonsoft.Json.JsonSerializer wrappedSerializer = null)
         {
             if (predicate == null)
@@ -41,17 +50,30 @@ namespace MongoDB.Integrations.JsonDotNet
         }
 
         // public properties
+        /// <summary>
+        /// Gets the predicate.
+        /// </summary>
+        /// <value>
+        /// The predicate.
+        /// </value>
         public Func<Type, bool> Predicate
         {
             get { return _predicate; }
         }
-        
+
+        /// <summary>
+        /// Gets the wrapped serializer.
+        /// </summary>
+        /// <value>
+        /// The wrapped serializer.
+        /// </value>
         public Newtonsoft.Json.JsonSerializer WrappedSerializer
         {
             get { return _wrappedSerializer; }
         }
 
         // public methods
+        /// <inheritdoc/>
         public IBsonSerializer GetSerializer(Type type)
         {
             if (!_predicate(type) || typeof(BsonValue).IsAssignableFrom(type))

@@ -19,11 +19,21 @@ using MongoDB.Bson;
 
 namespace MongoDB.Integrations.JsonDotNet.Converters
 {
+    /// <summary>
+    /// Represents a JsonConverter for BsonInt64 values.
+    /// </summary>
+    /// <seealso cref="MongoDB.Integrations.JsonDotNet.Converters.JsonConverterBase{T}" />
     public class BsonInt64Converter : JsonConverterBase<BsonInt64>
     {
         #region static
         private static readonly BsonInt64Converter __instance = new BsonInt64Converter();
 
+        /// <summary>
+        /// Gets a pre-created instance of a <see cref="BsonInt64Converter"/>.
+        /// </summary>
+        /// <value>
+        /// A <see cref="BsonInt64Converter"/>.
+        /// </value>
         public static BsonInt64Converter Instance
         {
             get { return __instance; }
@@ -31,6 +41,7 @@ namespace MongoDB.Integrations.JsonDotNet.Converters
         #endregion
 
         // public methods
+        /// <inheritdoc/>
         public override object ReadJson(Newtonsoft.Json.JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
             var adapter = reader as BsonReaderAdapter;
@@ -64,6 +75,7 @@ namespace MongoDB.Integrations.JsonDotNet.Converters
             }
         }
 
+        /// <inheritdoc/>
         public override void WriteJson(Newtonsoft.Json.JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)
         {
             if (value == null)
