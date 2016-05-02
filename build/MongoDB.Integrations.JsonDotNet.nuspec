@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>MongoDB.Integrations.JsonDotNet</id>
+    <version>@build.number@</version>
+    <authors>MongoDB, Inc.</authors>
+    <owners>rstam, craiggwilson</owners>
+    <iconUrl>http://jobs.mongodb.org/files/logos/889002/889002.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>MongoDB Integration with Json.NET.</description>
+    <projectUrl>http://www.mongodb.org/display/DOCS/CSharp+Language+Center</projectUrl>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <tags>mongodb mongo nosql bson json</tags>
+    <language>en-US</language>
+    @dependencies@
+  </metadata>
+  <files>
+    <file src="artifacts\bin\net45\MongoDB.Integrations.JsonDotNet.dll" target="lib\net45" />
+    <file src="artifacts\bin\net45\MongoDB.Integrations.JsonDotNet.pdb" target="lib\net45" />
+    <file src="artifacts\bin\net45\MongoDB.Integrations.JsonDotNet.xml" target="lib\net45" />
+    <file src="License.rtf" target ="" />
+    <file src="src\MongoDB.Integrations.JsonDotNet\**\*.cs" target="src\MongoDB.Integrations.JsonDotNet" />
+  </files>
+</package>

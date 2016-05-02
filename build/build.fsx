@@ -1,17 +1,20 @@
 #r @"../tools/FAKE/tools/FakeLib.dll"
-#load "build-version.fs"
+#load "BuildVersionModule.fs"
 
 open System
 open Fake
 open Fake.Testing.NUnit3
 
 let baseDir = currentDirectory
-let slnFile = baseDir @@ "MongoDB.Integrations.JsonDotNet.sln"
 let artifactsDir = baseDir @@ "artifacts"
 let binDir = artifactsDir @@ "bin"
 let binNet45Dir = binDir @@ "net45"
+let packagesOutputDir = artifactsDir @@ "packages"
 let testResultsDir = artifactsDir @@ "test-results"
+let buildDir = baseDir @@ "build"
+let srcDir = baseDir @@ "src"
 
+let slnFile = baseDir @@ "MongoDB.Integrations.JsonDotNet.sln"
 let config = getBuildParamOrDefault "config" "Release"
 
 let version = getBuildParamOrDefault "version" "1.0.0"
@@ -33,6 +36,26 @@ Target "Build" (fun _ ->
 
 Target "Clean" (fun _ ->
     CleanDir artifactsDir
+)
+
+Target "NugetPack" (fun _ ->
+    if not (directoryExists binNet45Dir) then raise (new Exception(sprintf "Directory %s does not exist." binNet45Dir))
+    ensureDirectory packagesOutputDir
+    !!(packagesOutputDir @@ "*.nupkg") |> DeleteFiles
+
+    let packagesConfigFile = srcDir @@ "MongoDB.Integrations.JsonDotNet" @@ "packages.config"
+    let dependencies = getDependencies packagesConfigFile
+    let nuspecFile = buildDir @@ "MongoDB.Integrations.JsonDotNet.nuspec"
+
+    NuGetPack (fun p ->
+        { p with
+            Dependencies = dependencies
+            OutputPath = packagesOutputDir
+            Version = semVersion
+            WorkingDir = baseDir
+            SymbolPackage = NugetSymbolPackage.Nuspec
+        })
+        nuspecFile
 )
 
 Target "RestorePackages" (fun _ ->
