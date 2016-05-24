@@ -16,6 +16,7 @@ let srcDir = baseDir @@ "src"
 
 let slnFile = baseDir @@ "MongoDB.Integrations.JsonDotNet.sln"
 let config = getBuildParamOrDefault "config" "Release"
+let assemblyInfoFilename = baseDir @@ "src" @@ "MongoDB.Integrations.JsonDotNet" @@ "Properties" @@ "AssemblyInfo.cs"
 
 let version = getBuildParamOrDefault "version" "1.0.0"
 let preRelease = getBuildParamOrDefault "preRelease" "local"
@@ -38,6 +39,23 @@ Target "Clean" (fun _ ->
     CleanDir artifactsDir
 )
 
+Target "ModifyAssemblyInfo" (fun _ ->
+    let gitHash = Git.Information.getCurrentSHA1 baseDir
+
+    ActivateFinalTarget "ResetAssemblyInfo"
+    ReplaceAssemblyInfoVersions (fun p ->
+        { p with
+            AssemblyConfiguration = config
+            AssemblyFileVersion = assemblyVersion
+            AssemblyInformationalVersion = semVersion
+            AssemblyMetadata = ["githash", gitHash]
+            AssemblyVersion = assemblyVersion
+            OutputFileName = assemblyInfoFilename
+        })
+
+    CopyFile (assemblyInfoFilename + ".modified") assemblyInfoFilename
+)
+
 Target "NugetPack" (fun _ ->
     if not (directoryExists binNet45Dir) then raise (new Exception(sprintf "Directory %s does not exist." binNet45Dir))
     ensureDirectory packagesOutputDir
@@ -56,6 +74,11 @@ Target "NugetPack" (fun _ ->
             SymbolPackage = NugetSymbolPackage.Nuspec
         })
         nuspecFile
+)
+
+FinalTarget "ResetAssemblyInfo" (fun _ ->
+    let command = sprintf "checkout %s" assemblyInfoFilename
+    Git.CommandHelper.runSimpleGitCommand baseDir command |> ignore
 )
 
 Target "RestorePackages" (fun _ ->
@@ -87,6 +110,7 @@ Target "Test" (fun _ ->
 // dependencies
 "Clean"
     ==> "RestorePackages"
+    ==> "ModifyAssemblyInfo"
     ==> "Build"
 
 RunTargetOrDefault "Build"

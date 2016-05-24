@@ -9,6 +9,12 @@ obj
 *.cache
 TestResults
 
+# Build artifacts
+Tools/FAKE
+src/MongoDB.Integrations.JsonDotNet/Properties/AssemblyInfo.cs.modified
+artifacts
+packages
+
 # CodeReview
 codereview.rc
 
@@ -52,8 +58,3 @@ src/packages
 # Merge tool artifacts
 *.cs.orig
 *.vb.orig
-
-# Other
-artifacts
-packages
-Tools/FAKE
