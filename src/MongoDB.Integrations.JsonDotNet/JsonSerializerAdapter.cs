@@ -21,7 +21,9 @@ using MongoDB.Bson;
 using System.Reflection;
 using System.Linq;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("MongoDB.Integrations.JsonDotNet.Tests")]
 namespace MongoDB.Integrations.JsonDotNet
 {
     internal static class JsonSerializerAdapterHelper
