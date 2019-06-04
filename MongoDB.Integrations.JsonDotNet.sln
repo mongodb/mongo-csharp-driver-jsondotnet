@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDB.Integrations.JsonDotNet", "src\MongoDB.Integrations.JsonDotNet\MongoDB.Integrations.JsonDotNet.csproj", "{BD207CF4-7494-4873-9D08-0FCE1A6A3B3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoDB.Integrations.JsonDotNet", "src\MongoDB.Integrations.JsonDotNet\MongoDB.Integrations.JsonDotNet.csproj", "{BD207CF4-7494-4873-9D08-0FCE1A6A3B3E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDB.Integrations.JsonDotNet.Tests", "tests\MongoDB.Integrations.JsonDotNet.Tests\MongoDB.Integrations.JsonDotNet.Tests.csproj", "{FC8172BA-9BF4-411A-8149-7887321A13BC}"
 EndProject
@@ -32,5 +32,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{BD207CF4-7494-4873-9D08-0FCE1A6A3B3E} = {C5830C65-B9F3-4BD4-BDC9-E8F617E9FD2F}
 		{FC8172BA-9BF4-411A-8149-7887321A13BC} = {857B0FAE-568A-4BAC-AE77-0704F282DB97}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {481EB202-C5D2-4A7F-9992-8386EE2730A7}
 	EndGlobalSection
 EndGlobal
